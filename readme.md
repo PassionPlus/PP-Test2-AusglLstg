@@ -1,6 +1,6 @@
 # Ausgleichsleistung zu Test 2 #
 
-## Aufgaben ##
+## Aufgabe ##
 
 Implementieren Sie die Caesar-Verschlüsselung als nebenläufiges Java-Programm. Eingabe, Verschlüsselung (Verschieben um 3 Stellen) und Ausgabe sollen dabei als nebenläufige Threads realisiert werden. Sie können das folgende Go-Programm als Ausgangspunkt benutzen:
 
