@@ -29,6 +29,7 @@ public class Caesar {
 	 * @return gibt den gleichen Buchstaben als großen zurück
 	 */
 	private static Character cap(final Character c) {
+		System.out.println("[cap]: " + c);
 		if (c >= 'a') {
 			return (char) (c - 'a' + 'A'); // TODO kann einfach gecastet werden?
 		}
@@ -36,22 +37,20 @@ public class Caesar {
 	}
 
 	/**
-	 * Eingabe von Zeichen, die in die t Queue eingelesen werden
+	 * Eingegebene Zeichen aus der Konsoleneingabe der main, werden in die t Queue
+	 * eingelesen
 	 * 
 	 * @param text
 	 *            Queue mit Chars
 	 */
 	public static void dictate(final BlockingQueue<Character> text) {
-		// Konsoleneingabe in String speichern
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			input = br.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		// Danach String über CharArray in die Queue einfügen
 		for (Character c : input.toCharArray()) {
-			text.offer(c);
+			try {
+				text.put(c);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (c == eol) {
 				break;
 			}
@@ -97,7 +96,7 @@ public class Caesar {
 			System.out.print(c);
 		}
 		System.out.println();
-		/*-
+		/*- TODO ist die Übersetzung so richtig und vollständig?
 		    func send(c chan byte, d chan bool) {
 		        b := byte(0)
 		        for b != eol {
@@ -108,7 +107,6 @@ public class Caesar {
 		    }
 		*/
 		try {
-			
 			done.put(true); // d <- true
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -122,10 +120,21 @@ public class Caesar {
 	 * @param args
 	 */
 	public static void main(final String[] args) throws InterruptedException {
-		System.out.printf("PP\nAusgleichsleistung zum Test 2\nvon Stella Nesa und Benjamin Schönke\n\n");
-		System.out.printf("Caesar-Verschlüsselung als nebenläufiges Java-Programm\n\n");
-		// TODO input = bufio.NewReader(os.Stdin)
-		System.out.printf("Bitte geben Sie einen String ein, der verschlüsselt werden soll: ");
+		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.println("PP");
+		System.out.println("Ausgleichsleistung zum Test 2");
+		System.out.println("von Stella Nesa und Benjamin Schönke");
+		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+		System.out.println("Caesar-Verschlüsselung als nebenläufiges Java-Programm");
+		System.out.println("------------------------------------------------------\n");
+		System.out.print("Bitte geben Sie einen String ein, der verschlüsselt werden soll: ");
+		// Konsoleneingabe in String speichern
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); // input = bufio.NewReader(os.Stdin)
+		try {
+			input = br.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		final BlockingQueue<Character> textchan = new LinkedBlockingQueue<>(); // textchan := make(chan byte)
 		final BlockingQueue<Character> cryptchan = new LinkedBlockingQueue<>(); // cryptchan := make(chan byte)
