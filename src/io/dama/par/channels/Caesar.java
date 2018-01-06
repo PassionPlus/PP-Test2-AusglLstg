@@ -110,18 +110,18 @@ public class Caesar {
 	 * 
 	 * @param args
 	 */
-	public static void main(final String[] args) {
-		/*-
-		    func main() {
-		        input = bufio.NewReader(os.Stdin)
-		        textchan := make(chan byte)
-		        cryptchan := make(chan byte)
-		        done := make(chan bool)
-		        go dictate(textchan)
-		        go encrypt(textchan, cryptchan)
-		        go send(cryptchan, done)
-		        <-done
-		    }
-		*/
+	public static void main(final String[] args) throws InterruptedException {
+		System.out.printf("PP\nAusgleichsleistung zum Test 2\nvon Stella Nesa und Benjamin Schönke\n\n");
+		System.out.printf("Caesar-Verschlüsselung als nebenläufiges Java-Programm\n\n");
+		// TODO input = bufio.NewReader(os.Stdin)
+		// System.out.printf("Bitte geben Sie einen String ein, der verschlüsselt werden soll: ");
+		
+		final BlockingQueue<Character> textchan = new LinkedBlockingQueue<>(); // textchan := make(chan byte)
+		final BlockingQueue<Character> cryptchan = new LinkedBlockingQueue<>(); // cryptchan := make(chan byte)
+		final BlockingQueue<Boolean> done = new LinkedBlockingQueue<>(); // done := make(chan bool)
+		(new Thread(() -> Caesar.dictate(textchan))).start(); // go dictate(textchan)
+		(new Thread(() -> Caesar.encrypt(textchan, cryptchan))).start(); // go encrypt(textchan, cryptchan)
+		(new Thread(() -> Caesar.send(cryptchan, done))).start(); // go send(cryptchan, done)
+		done.take(); // <-done
 	}
 }
