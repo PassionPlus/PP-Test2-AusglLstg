@@ -16,20 +16,19 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Caesar {
 	final static int eol = 13;
 	static String input = null;
-	/*- // TODO ist das so richtig?
+	/*- // TODO ist die Übersetzung von go zu Java und auch sinngemäß so richtig?
 	const eol = 13
 	var input *bufio.Reader
 	*/
 
 	/**
-	 * Macht aus Kleinbuchstaben -> Großbuchstaben
+	 * Sorgt dafür, dass Kleinbuchstaben klein bleiben und große groß
 	 * 
 	 * @param c
 	 *            Character
 	 * @return gibt den gleichen Buchstaben als großen zurück
 	 */
 	private static Character cap(final Character c) {
-		System.out.println("[cap]: " + c);
 		if (c >= 'a') {
 			return (char) (c - 'a' + 'A'); // TODO kann einfach gecastet werden?
 		}
@@ -37,8 +36,8 @@ public class Caesar {
 	}
 
 	/**
-	 * Eingegebene Zeichen aus der Konsoleneingabe der main, werden in die t Queue
-	 * eingelesen
+	 * Eingegebene Zeichen aus der Konsoleneingabe der main, werden in die text
+	 * Queue eingelesen
 	 * 
 	 * @param text
 	 *            Queue mit Chars
@@ -92,10 +91,11 @@ public class Caesar {
 	 *            Queue mit Boolean, um das Ende abzufragen
 	 */
 	public static void send(final BlockingQueue<Character> crypted, final BlockingQueue<Boolean> done) {
+		System.out.print("\nDie verschlüsselte Nachricht lautet: ");
 		for (Character c : crypted) {
 			System.out.print(c);
 		}
-		System.out.println();
+		System.out.println("\n");
 		/*- TODO ist die Übersetzung so richtig und vollständig?
 		    func send(c chan byte, d chan bool) {
 		        b := byte(0)
@@ -121,27 +121,32 @@ public class Caesar {
 	 */
 	public static void main(final String[] args) throws InterruptedException {
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-		System.out.println("PP");
+		System.out.println("Parallele Programmierung");
 		System.out.println("Ausgleichsleistung zum Test 2");
 		System.out.println("von Stella Nesa und Benjamin Schönke");
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 		System.out.println("Caesar-Verschlüsselung als nebenläufiges Java-Programm");
 		System.out.println("------------------------------------------------------\n");
 		System.out.print("Bitte geben Sie einen String ein, der verschlüsselt werden soll: ");
-		// Konsoleneingabe in String speichern
+		// Konsoleneingabe in String input speichern
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); // input = bufio.NewReader(os.Stdin)
 		try {
 			input = br.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		final double now = System.currentTimeMillis();
 		final BlockingQueue<Character> textchan = new LinkedBlockingQueue<>(); // textchan := make(chan byte)
 		final BlockingQueue<Character> cryptchan = new LinkedBlockingQueue<>(); // cryptchan := make(chan byte)
 		final BlockingQueue<Boolean> done = new LinkedBlockingQueue<>(); // done := make(chan bool)
 		(new Thread(() -> Caesar.dictate(textchan))).start(); // go dictate(textchan)
 		(new Thread(() -> Caesar.encrypt(textchan, cryptchan))).start(); // go encrypt(textchan, cryptchan)
 		(new Thread(() -> Caesar.send(cryptchan, done))).start(); // go send(cryptchan, done)
-		done.take(); // <-done
+		boolean isDone = done.take(); // <-done
+		if (isDone) {
+			System.out.println("Benötigte Zeit: " + (System.currentTimeMillis() - now) + " ms");
+			System.out.println("------------------");
+			System.out.println("[PROGRAMM BEENDET]");
+		}
 	}
 }

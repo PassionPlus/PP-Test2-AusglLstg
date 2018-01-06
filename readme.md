@@ -1,3 +1,13 @@
+### TODOs ###
+
+* Die TODOs innerhalb von Caesar können noch angegangen werden.
+* Es gab bis jetzt paar mal den Fall, wo nach Eingabe eines Wortes das Programm beendet wurde, ohne, dass das verschlüsselte Wort angezeigt wurde. Das heißt, es sollte überprüft werden, ob der Einsatz von Blockierung (put, take) und keine Blockierung (offer, poll) richtig angewendet wurde.
+* Überflüssige bzw. nicht mehr benötigte Kommentare können gelöscht werden.
+* Der Sinn und der Einsatz von eol (end of line???) ist noch fragwürdig (aus go übernommen).
+* Es können natürlich noch sonstige Verschönerungen und Verbesserungen vorgenommen werden.
+* Ich habe noch eine Zeitberechnung hinzugefügt. Es sollte überlegt werden, ob die lieber bleibt oder lieber raus soll, wegen evtl. Vor- oder Nachteile dadurch für uns.
+* Wenn für das Verständnis nicht mehr benötigt, kann der Addierer gelöscht werden.
+
 # Ausgleichsleistung zu Test 2 #
 
 ## Aufgabe ##
