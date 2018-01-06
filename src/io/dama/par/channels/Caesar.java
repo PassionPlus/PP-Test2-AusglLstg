@@ -1,16 +1,22 @@
-package io.dama.par.channels;
+package io.dama.par.channels; // package main
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+/*-
+import (
+    "bufio"
+    "fmt"
+    "os"
+)
+*/
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Caesar {
-	/*-
-	package main
-	import (
-	    "bufio"
-	    "fmt"
-	    "os"
-	)
+	final static int eol = 13;
+	static String input = null;
+	/*- // TODO ist das so richtig?
 	const eol = 13
 	var input *bufio.Reader
 	*/
@@ -24,74 +30,73 @@ public class Caesar {
 	 */
 	private static Character cap(final Character c) {
 		if (c >= 'a') {
-			return c - 'a' + 'A'; // TODO kann einfach gecastet werden?
+			return (char) (c - 'a' + 'A'); // TODO kann einfach gecastet werden?
 		}
-		/*-
-		    func cap(b byte) byte {
-		        if b >= 'a' {
-		            return b - 'a' + 'A'
-		        }
-		        return b
-		    }
-		 */
 		return c;
 	}
 
 	/**
 	 * Eingabe von Zeichen, die in die t Queue eingelesen werden
 	 * 
-	 * @param t
+	 * @param text
 	 *            Queue mit Chars
 	 */
-	public static void dictate(final BlockingQueue<Character> t) {
-		/*-
-		    func dictate(t chan byte) {
-		        for {
-		            b, _ := input.ReadByte()
-		            t <- b
-		            if b == eol {
-		                break
-		            }
-		        }
-		    }
-		*/
+	public static void dictate(final BlockingQueue<Character> text) {
+		// Konsoleneingabe in String speichern
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			input = br.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// Danach String über CharArray in die Queue einfügen
+		for (Character c : input.toCharArray()) {
+			text.offer(c);
+			if (c == eol) {
+				break;
+			}
+		}
 	}
 
 	/**
-	 * Verschlüsselung liest die Zeichen aus Queue, verschiebt diese um 3 Stellen
-	 * und schreibt sie in die andere Queue
+	 * Verschlüsselung liest die Zeichen aus Queue text, verschiebt diese um 3
+	 * Stellen und schreibt sie in die Queue crypted
 	 * 
-	 * @param t
-	 *            Queue mit chars
-	 * @param c
-	 *            Queue mit chars
+	 * @param text
+	 *            Queue mit chars aus Klartext
+	 * @param crypted
+	 *            Queue mit chars welche verschlüsselt wird
 	 */
-	public static void encrypt(final BlockingQueue<Character> t, final BlockingQueue<Character> c) {
-		/*-
-		    func encrypt(t, c chan byte) {
-		        for {
-		            b := <-t 
-		            if b == ' ' || b == '.' || b == eol {
-		                c <- b
-		            } else if cap(b) < 'X' {
-		                c <- b + 3
-		            } else {
-		                c <- b - 23
-		            }
-		        }
-		    }
-		*/
+	public static void encrypt(final BlockingQueue<Character> text, final BlockingQueue<Character> crypted) {
+		for (Character c : text) {
+			try {
+				if (c == ' ' || c == '.' || c == eol) {
+					crypted.put(c);
+				} else if (cap(c) < 'X') {
+					crypted.put((char) (c + 3));
+				} else {
+					crypted.put((char) (c - 23));
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
-	 * Gibt die c Queue aus und trägt true in done Queue ein
+	 * Gibt die crypted Queue aus und trägt true in done Queue ein
 	 * 
-	 * @param c
-	 *            Queue mit chars
+	 * @param crypted
+	 *            Queue mit chars welche verschlüsselt sind
 	 * @param done
-	 *            Queue mit Boolean
+	 *            Queue mit Boolean, um das Ende abzufragen
 	 */
-	public static void send(final BlockingQueue<Character> c, final BlockingQueue<Boolean> done) {
+	public static void send(final BlockingQueue<Character> crypted, final BlockingQueue<Boolean> done) {
+		for (Character c : crypted) {
+			System.out.print(c);
+		}
+		System.out.println();
 		/*-
 		    func send(c chan byte, d chan bool) {
 		        b := byte(0)
@@ -100,9 +105,15 @@ public class Caesar {
 		            fmt.Print(string(b))
 		        }
 		        fmt.Println()
-		        d <- true
 		    }
 		*/
+		try {
+			
+			done.put(true); // d <- true
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -114,8 +125,8 @@ public class Caesar {
 		System.out.printf("PP\nAusgleichsleistung zum Test 2\nvon Stella Nesa und Benjamin Schönke\n\n");
 		System.out.printf("Caesar-Verschlüsselung als nebenläufiges Java-Programm\n\n");
 		// TODO input = bufio.NewReader(os.Stdin)
-		// System.out.printf("Bitte geben Sie einen String ein, der verschlüsselt werden soll: ");
-		
+		System.out.printf("Bitte geben Sie einen String ein, der verschlüsselt werden soll: ");
+
 		final BlockingQueue<Character> textchan = new LinkedBlockingQueue<>(); // textchan := make(chan byte)
 		final BlockingQueue<Character> cryptchan = new LinkedBlockingQueue<>(); // cryptchan := make(chan byte)
 		final BlockingQueue<Boolean> done = new LinkedBlockingQueue<>(); // done := make(chan bool)
