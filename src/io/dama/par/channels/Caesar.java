@@ -14,7 +14,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Caesar {
-	final static int eol = 13; // Enter Knopf, Ascii-Zeichen 13
+	final static int eol = 13; // EnterKnopf, Ascii-Zeichen 13
 	private static String input = null;
 	 
 	/**
