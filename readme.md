@@ -7,6 +7,7 @@
 * Es können natürlich noch sonstige Verschönerungen und Verbesserungen vorgenommen werden.
 * Ich habe noch eine Zeitberechnung hinzugefügt. Es sollte überlegt werden, ob die lieber bleibt oder lieber raus soll, wegen evtl. Vor- oder Nachteile dadurch für uns.
 * Wenn für das Verständnis nicht mehr benötigt, kann der Addierer gelöscht werden.
+-> Kann doch behalten werden :) wir müsssen nur die Caesar Klasse ansich abgeben , nicht das ganze Projekt :)
 
 # Ausgleichsleistung zu Test 2 #
 

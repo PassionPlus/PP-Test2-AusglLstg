@@ -14,13 +14,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Caesar {
-	final static int eol = 13;
-	static String input = null;
-	/*- // TODO ist die Übersetzung von go zu Java und auch sinngemäß so richtig?
-	const eol = 13
-	var input *bufio.Reader
-	*/
-
+	final static int eol = 13; // Enter Knopf, Ascii-Zeichen 13
+	private static String input = null;
+	 
 	/**
 	 * Sorgt dafür, dass Kleinbuchstaben klein bleiben und große groß
 	 * 
@@ -30,7 +26,7 @@ public class Caesar {
 	 */
 	private static Character cap(final Character c) {
 		if (c >= 'a') {
-			return (char) (c - 'a' + 'A'); // TODO kann einfach gecastet werden?
+			return Character.toUpperCase(c); 
 		}
 		return c;
 	}
@@ -47,7 +43,6 @@ public class Caesar {
 			try {
 				text.put(c);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			if (c == eol) {
@@ -68,15 +63,15 @@ public class Caesar {
 	public static void encrypt(final BlockingQueue<Character> text, final BlockingQueue<Character> crypted) {
 		for (Character c : text) {
 			try {
+				// Wenn eines dieser drei Zeichen , dann nicht verschluesseln 
 				if (c == ' ' || c == '.' || c == eol) {
 					crypted.put(c);
-				} else if (cap(c) < 'X') {
+				} else if (cap(c) < 'X') {   // ab hier verschluesselungs magic 
 					crypted.put((char) (c + 3));
 				} else {
 					crypted.put((char) (c - 23));
 				}
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -92,24 +87,14 @@ public class Caesar {
 	 */
 	public static void send(final BlockingQueue<Character> crypted, final BlockingQueue<Boolean> done) {
 		System.out.print("\nDie verschlüsselte Nachricht lautet: ");
+		// Laufe den Text duch bis man zu eol angekommen ist-> siehe go, hier nicht so umgesetzt 
 		for (Character c : crypted) {
 			System.out.print(c);
 		}
 		System.out.println("\n");
-		/*- TODO ist die Übersetzung so richtig und vollständig?
-		    func send(c chan byte, d chan bool) {
-		        b := byte(0)
-		        for b != eol {
-		            b = <-c
-		            fmt.Print(string(b))
-		        }
-		        fmt.Println()
-		    }
-		*/
 		try {
-			done.put(true); // d <- true
+			done.put(true); // d <- true , Nachricht Senden
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -127,7 +112,7 @@ public class Caesar {
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 		System.out.println("Caesar-Verschlüsselung als nebenläufiges Java-Programm");
 		System.out.println("------------------------------------------------------\n");
-		System.out.print("Bitte geben Sie einen String ein, der verschlüsselt werden soll: ");
+		System.out.print("Bitte geben Sie einen Text ein, der verschlüsselt werden soll: ");
 		// Konsoleneingabe in String input speichern
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); // input = bufio.NewReader(os.Stdin)
 		try {
