@@ -88,25 +88,16 @@ public class Caesar {
 		System.out.print("\nDie verschlüsselte Nachricht lautet: ");
 		// Laufe den Text duch bis man zu eol angekommen ist-> siehe go, hier nicht so
 		// umgesetzt
-//		for (Character c : crypted) {
-//			System.out.print(c);
-//		}
-	   
-		/**
-		 * Also das würde schon Sinn machen, weil die abbruchbedingung in go auch eol ist,
-		 * allerdings wird die schleife nie verlassen
-		 */
-	    	Character c;
-			try {
-				while (( c =crypted.take())!= eol) {
-				         System.out.println(c);
-				        
-				 }
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		
+		// for (Character c : crypted) {
+		// System.out.print(c);
+		// }
+
+		/*hier gerne poll mit take() ersetzen und abbruch bedingung eol verwenden . Es verlässt nicht die schleife */
+		Character c;
+		while ((c = crypted.poll()) != null) {
+			System.out.println(c);
+		}
+
 		try {
 			done.put(true); // d <- true , Nachricht Senden
 		} catch (InterruptedException e) {
