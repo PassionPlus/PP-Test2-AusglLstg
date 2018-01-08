@@ -86,15 +86,13 @@ public class Caesar {
 	 */
 	public static void send(final BlockingQueue<Character> crypted, final BlockingQueue<Boolean> done) {
 		System.out.print("\nDie verschlüsselte Nachricht lautet: ");
-		System.out.println("This is a git test");
+		
 		// Laufe den Text duch bis man zu eol angekommen ist-> siehe go, hier nicht so
 		// umgesetzt
 		// for (Character c : crypted) {
 		// System.out.print(c);
 		// }
-
-		//NervNerv hier weiter ...nervnerv 
-		/*hier gerne poll mit take() ersetzen und abbruch bedingung eol verwenden . Es verlässt nicht die schleife */
+		
 		Character c;
 		while ((c = crypted.poll()) != null) {
 			System.out.println(c);
