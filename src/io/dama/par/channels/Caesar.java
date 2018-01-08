@@ -92,6 +92,7 @@ public class Caesar {
 		// System.out.print(c);
 		// }
 
+		//NervNerv
 		/*hier gerne poll mit take() ersetzen und abbruch bedingung eol verwenden . Es verlässt nicht die schleife */
 		Character c;
 		while ((c = crypted.poll()) != null) {
