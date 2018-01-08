@@ -16,7 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Caesar {
 	final static int eol = 13; // EnterKnopf, Ascii-Zeichen 13
 	private static String input = null;
-	 
+
 	/**
 	 * Sorgt dafür, dass Kleinbuchstaben klein bleiben und große groß
 	 * 
@@ -26,17 +26,16 @@ public class Caesar {
 	 */
 	private static Character cap(final Character c) {
 		if (c >= 'a') {
-			return Character.toUpperCase(c); 
+			return Character.toUpperCase(c);
 		}
 		return c;
 	}
 
-	/**
+	/*
 	 * Eingegebene Zeichen aus der Konsoleneingabe der main, werden in die text
 	 * Queue eingelesen
 	 * 
-	 * @param text
-	 *            Queue mit Chars
+	 * @param text Queue mit Chars
 	 */
 	public static void dictate(final BlockingQueue<Character> text) {
 		for (Character c : input.toCharArray()) {
@@ -63,10 +62,10 @@ public class Caesar {
 	public static void encrypt(final BlockingQueue<Character> text, final BlockingQueue<Character> crypted) {
 		for (Character c : text) {
 			try {
-				// Wenn eines dieser drei Zeichen , dann nicht verschluesseln 
+				// Wenn eines dieser drei Zeichen , dann nicht verschluesseln
 				if (c == ' ' || c == '.' || c == eol) {
 					crypted.put(c);
-				} else if (cap(c) < 'X') {   // ab hier verschluesselungs magic 
+				} else if (cap(c) < 'X') { // ab hier verschluesselungs magic
 					crypted.put((char) (c + 3));
 				} else {
 					crypted.put((char) (c - 23));
@@ -87,11 +86,27 @@ public class Caesar {
 	 */
 	public static void send(final BlockingQueue<Character> crypted, final BlockingQueue<Boolean> done) {
 		System.out.print("\nDie verschlüsselte Nachricht lautet: ");
-		// Laufe den Text duch bis man zu eol angekommen ist-> siehe go, hier nicht so umgesetzt 
-		for (Character c : crypted) {
-			System.out.print(c);
-		}
-		System.out.println("\n");
+		// Laufe den Text duch bis man zu eol angekommen ist-> siehe go, hier nicht so
+		// umgesetzt
+//		for (Character c : crypted) {
+//			System.out.print(c);
+//		}
+	   
+		/**
+		 * Also das würde schon Sinn machen, weil die abbruchbedingung in go auch eol ist,
+		 * allerdings wird die schleife nie verlassen
+		 */
+	    	Character c;
+			try {
+				while (( c =crypted.take())!= eol) {
+				         System.out.println(c);
+				        
+				 }
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		
 		try {
 			done.put(true); // d <- true , Nachricht Senden
 		} catch (InterruptedException e) {
@@ -133,5 +148,7 @@ public class Caesar {
 			System.out.println("------------------");
 			System.out.println("[PROGRAMM BEENDET]");
 		}
+		return; // um main zu beenden , wenns net klappt restlicher Code soll ja nicht
+				// ausgeführt werden deshalb return
 	}
 }
